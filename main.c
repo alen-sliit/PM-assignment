@@ -441,7 +441,7 @@ int checkReroll(){
         return 0;
     }
     // Rerolling for Large straight
-    if (!isNumberInArray(computerChosen,computerChosenCount,11)){
+    if (!isNumberInArray(computerChosen,computerChosenCount,11) && max != 3){
         if (isLargeStraight()) return 0;
         int count = 0;
         int valid = isSmallStraight();
@@ -484,7 +484,7 @@ int checkReroll(){
     }
 
     // Rerolling for small straight
-    if (!isNumberInArray(computerChosen,computerChosenCount,10)){
+    if (!isNumberInArray(computerChosen,computerChosenCount,10) && max != 3){
         int valid = is3seq();
         int count = 0;
 
