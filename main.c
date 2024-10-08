@@ -25,8 +25,6 @@ int isNumberInArray(int arr[], int size, int number);
 void printScorecard(int humanScores[13],int computerScores[13], char* player1, char* player2);
 int chooseWinner();
 
-
-// Scoring categories
 enum Categories { ONES = 1, TWOS, THREES, FOURS, FIVES, SIXES, THREE_OF_A_KIND, FOUR_OF_A_KIND, FULL_HOUSE, SMALL_STRAIGHT, LARGE_STRAIGHT, YAHTZEE, CHANCE };
 
 int humanChosen[ROUNDS];
@@ -337,7 +335,6 @@ int computerTurn(){
 }
 
 int optimalThinking(){
-
     int sum = sumDice();
     
     // prioratize 12,11,9
@@ -565,13 +562,11 @@ int checkReroll(){
 }
 
 void printScorecard(int humanScores[13],int computerScores[13], char* player1, char* player2) {
-    // Print the header with player names
     printf("+------------------+----------+----------+\n");
     printf("|                  | %-8s | %-8s |\n", player1, player2);
     printf("+------------------+----------+----------+\n");
 
-    // Print each category and the corresponding scores with borders
-    for (int i = 0; i < 14; i++) {
+    for (int i = 0; i < 13; i++) {
         if (i == 13)
             printf("| %-16s | %8d | %8d |\n", categories[i], humanScoreTotal, computerScoreTotal);
         else
