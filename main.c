@@ -11,7 +11,7 @@ void humanTurn();
 int chooseCategory();
 int calculateScore(int category);
 int getScoreAKind(int Category);
-int getCardCount();
+void getCardCount();
 int isLargeStraight();
 int isFullHouse();
 int isSmallStraight();
@@ -42,7 +42,7 @@ char *categories[] = {
 int main() {
     
     int category, tempScore;
-   // srand(time(NULL));
+    // srand(time(NULL));
     printf("Welcome to Two-Player Yahtzee (Human vs Computer)\n");
 
     //Rounds 13
@@ -141,7 +141,7 @@ int chooseWinner(){
     if (humanScoreTotal > computerScoreTotal) 
         printf("\nHuman wins with a score of %d vs %d!\n", humanScoreTotal, computerScoreTotal);
     else if (humanScoreTotal < computerScoreTotal) 
-        printf("\nComputer wins with a score of %d vs %d!\n", computerScoreTotal, computerScoreTotal);
+        printf("\nComputer wins with a score of %d vs %d!\n", computerScoreTotal, humanScoreTotal);
     else 
         printf("\nIt's a tie! Both players scored %d!\n", humanScoreTotal);
 }
@@ -176,26 +176,13 @@ int calculateScore(int category) {
     return score;
 }
 
-int getCardCount(){
+void getCardCount(){
     for (int i = 0; i < 6; i++) 
         countArray[i] = 0;
 
     for (int i = 0; i < DICE; i++) {
-        switch (dice[i]){
-        case 1: countArray[0] += 1;
-                break;
-        case 2: countArray[1] += 1;
-                break;
-        case 3: countArray[2] += 1;
-                break;
-        case 4: countArray[3] += 1;
-                break;
-        case 5: countArray[4] += 1;
-                break;
-        case 6: countArray[5] += 1;
-                break;
-    }}
-    return 0;
+        countArray[dice[i] - 1]++;
+        }
 }
 
 int getScoreAKind(int Category){
@@ -371,6 +358,11 @@ int maxDice(){
     printf("maxCat1: %d ", maxCategory1);
     printf("maxCat2: %d ", maxCategory2);
     printf("sum: %d\n", sum);
+
+    printf("Computer Chosen cat: ");
+    for (int i=0; i < 13; i++)
+        printf("%d ", computerChosen[i]);
+    printf("\n");    
     
 }
 
@@ -419,41 +411,36 @@ int checkReroll(){
     }
 
     // Rerolling for small straight
-    if (!isNumberInArray(computerChosen,computerChosenCount,10) && max < 3){
+    if ((!isNumberInArray(computerChosen,computerChosenCount,10) || !isNumberInArray(computerChosen,computerChosenCount,11)) && (max < 3 || computerChosenCount > 7)){
+        int count = 0;
         int valid = is3seq();
-        int count;
 
-        for (int i = 0; i < DICE; i++){
-            count = 0;   
-            if (valid)
+        if (valid)
+            for (int i = 0; i < DICE; i++){
                 if (countArray[dice[i] - 1] > 1){
                     if (count)
                         dice[i] = 0;
                     count++;
                 }
-            if (valid == 1)                
-                if (dice[i] == 6 || dice[i] == 5 )
-                    dice[i] = 0;
-                    
-            if (valid == 2)                       
-                if (dice[i] == 6 )
-                    dice[i] = 0;
-        
-            if (valid == 3)
-                for (int i = 0; i < DICE; i++)                        
+                if (valid == 1)                
+                    if (dice[i] == 6 || dice[i] == 5 )
+                        dice[i] = 0;     
+                if (valid == 2)                       
+                    if (dice[i] == 6 )
+                        dice[i] = 0;
+                if (valid == 3)
                     if (dice[i] == 1)
                         dice[i] = 0;
-
-            if (valid == 4)                           
-                if (dice[i] == 1 || dice[i] == 2)
-                    dice[i] = 0; 
+                if (valid == 4)                           
+                    if (dice[i] == 1 || dice[i] == 2)
+                        dice[i] = 0; 
         }
         return 0;  
     }
 
     // Rerolling for maximaize the maximum nummber
     if (maxCategory1 > maxCategory2 && maxCategory1 > 2)
-        if (!isNumberInArray(computerChosen, computerChosenCount, maxCategory1)){
+        if ((!isNumberInArray(computerChosen, computerChosenCount, maxCategory1) || computerChosenCount > 7)){
             for (int i = 0; i < DICE; i++)                              
                 if (dice[i] != maxCategory1)
                     dice[i] = 0;
@@ -465,13 +452,17 @@ int checkReroll(){
                 if (dice[i] != maxCategory2)
                     dice[i] = 0;
             return 0;
-        }    
+        }  
 
-    for (int i = 6; i > 0; i-- )
-        if (!isNumberInArray(computerChosen, computerChosenCount, i))
-            for (int i = 0; i < DICE; i++)                              
-                if (dice[i] != i)
-                    dice[i] = 0;
+    printf("Last option!!\n");  
+    for (int i = 6; i > 0; i--)
+        if (!isNumberInArray(computerChosen, computerChosenCount, i)){ 
+            printf("going for %d\n",i);         
+            for (int x = 0; x < DICE; x++)                              
+                if (dice[x] != i)
+                    dice[x] = 0;
+            return 0;
+        }
     return 0;   
 }
 
