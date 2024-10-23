@@ -79,23 +79,22 @@ void rollDice() {
 
 void humanTurn() {
     rollDice();
-    int reroll[DICE];
-    int rerolls;
+    int reroll[DICE], rerolls;
     
     for (int roll = 0; roll < 2; roll++) {  // Allow 2 rerolls (3 rolls total)
-        do{
+        do {
             printf("Do you want to re-roll? (0: No, 1: Yes): ");
             scanf("%d", &rerolls);
-        }while (rerolls != 0 && rerolls != 1 );
+        } while (rerolls != 0 && rerolls != 1 );
         
-        if (rerolls == 0) 
+        if (!rerolls) 
             break;
         
         for (int i = 0; i < DICE; i++) 
-            do{
+            do {
                 printf("Keep die %d? (0: Re-roll, 1: Keep): ", dice[i]);
                 scanf("%d", &reroll[i]);
-            }while (reroll[i] != 0 && reroll[i] != 1 );
+            } while (reroll[i] != 0 && reroll[i] != 1 );
         
         printf("Rolled dice: ");
         for (int i = 0; i < DICE; i++) {
